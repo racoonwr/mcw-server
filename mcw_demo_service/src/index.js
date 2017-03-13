@@ -1,7 +1,7 @@
 import {select_from_g_user} from './query/test'
 var serverIns = require('./restify_server_ins')
 
-serverIns.get('queryListVideo/:vid/:count/:type/:userId', function respond(req, res, next){
+serverIns.get('user/all', function respond(req, res, next){
     select_from_g_user(req, res, next)
 });
 
