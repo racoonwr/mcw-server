@@ -1,0 +1,22 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "babel-node src/index.js",
+    "build": "babel src --out-dir lib"
+  },
+  "dependencies": {
+    "dtrace-provider": "^0.8.1",
+    "mysql": "^2.13.0",
+    "restify": "^4.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.0",
+    "babel-plugin-transform-es2015-parameters": "^6.23.0",
+    "babel-plugin-transform-es2015-spread": "^6.22.0",
+    "babel-plugin-transform-strict-mode": "^6.22.0"
+  }
+}
