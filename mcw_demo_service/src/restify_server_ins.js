@@ -7,4 +7,6 @@ var instance = restify.createServer({
     version: '1.0.0'
 });
 
+instance.use(restify.bodyParser());
+
 module.exports = instance;
