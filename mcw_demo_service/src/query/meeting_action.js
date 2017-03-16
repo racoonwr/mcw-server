@@ -1,7 +1,7 @@
 /**
  * Created by racoon on 2017/3/14.
  */
-var mysqlConn = require('../config/maria_db_config')
+var db = require('../config/maria_db_config')
 
 export function create_meeting(req, res) {
     console.log('body = ', req.body);
@@ -12,26 +12,27 @@ export function create_meeting(req, res) {
 
     var inputParams = [req.params.meetingId, req.params.title, req.params.startDatePlan,
         req.params.endDatePlan, req.params.meetingRequire, req.params.location, 'CREATED',
-        'WIFI_MAC_ADD', req.params.userId, now.getMilliseconds(),
-        req.params.userId, now.getMilliseconds(), 'VALID', 1];
+        'WIFI_MAC_ADD', req.params.userId, now.getTime(),
+        req.params.userId, now.getTime(), 'VALID', 1];
 
     console.log('createMeetingSql ', createMeetingSql);
     console.log('inputParams ', inputParams);
-
-    mysqlConn.query(createMeetingSql, inputParams, function (err, result) {
-
-        if (err) {
-            console.log('[INSERT ERROR] - ', err.message);
-            requestResult.code = 1;
-            requestResult.message = err.message;
-            requestResult.data = false;
-        } else {
-            console.log('INSERT ID : ', result);
-            requestResult.code = 0;
-            requestResult.message = 'success';
-            requestResult.data = true;
-        }
-        return res.send(200, res.json(requestResult));
+    db.getConnection(function(connection){
+        connection.query(createMeetingSql, inputParams, function (err, result) {
+            var requestResult = {};
+            if (err) {
+                console.log('[INSERT ERROR] - ', err.message);
+                requestResult.code = 1;
+                requestResult.message = err.message;
+                requestResult.data = false;
+            } else {
+                console.log('INSERT ID : ', result);
+                requestResult.code = 0;
+                requestResult.message = 'success';
+                requestResult.data = true;
+            }
+            return res.send(200, res.json(requestResult));
+        });
     });
 };
 
@@ -59,7 +60,10 @@ export function get_meeting_list(req, res) {
 
 
 export function get_meeting_detail(req, res) {
-    var query = 'select gm.* from g_meeting gm where gm.meeting_id = ?';
+    var query = 'select gm.meeting_id as meetingId,gm.title as title,gm.start_date_plan as startDatePlan,' +
+        'gm.end_date_plan as endDatePlan,gm.summary_info_id as summaryInfoId,gm.meeting_require as meetingRequire,' +
+        'gm.location as location,gm.status_code as statusCode,gm.created_by as createdBy,gm.creation_date as' +
+        ' creationDate from g_meeting gm where gm.meeting_id = ?';
     var inputParam = [req.params.meetingId];
     mysqlConn.query(query, inputParam, function (err, rows) {
         var requestResult = {};
@@ -75,4 +79,48 @@ export function get_meeting_detail(req, res) {
         }
         res.send(200, res.json(requestResult));
     })
+}
+
+export function start_meeting(req, res) {
+    var updateSql = 'UPDATE g_meeting SET status_code = ?,begin_sign_time = ? WHERE meeting_id = ?';
+    var updateSql_Params = ['INMEETING', new Date().getTime(), req.params.meetingId];
+    mysqlConn.query(updateSql, updateSql_Params, function (err, result) {
+        var requestResult = {};
+        if (err) {
+            console.log('[UPDATE ERROR] - ', err.message);
+            requestResult.code = 1;
+            requestResult.message = err.message;
+            requestResult.data = false;
+        } else {
+            console.log('----------UPDATE-------------');
+            console.log('UPDATE affectedRows', result.affectedRows);
+            console.log('******************************');
+            requestResult.code = 0;
+            requestResult.message = 'success';
+            requestResult.data = true;
+        }
+        res.send(200, res.json(requestResult));
+    });
+}
+
+export function end_meeting(req, res) {
+    var updateSql = 'UPDATE g_meeting SET status_code = ?,END_MEETING_TIME = ? WHERE meeting_id = ?';
+    var updateSql_Params = ['SUMMARY', new Date().getTime(), req.params.meetingId];
+    mysqlConn.query(updateSql, updateSql_Params, function (err, result) {
+        var requestResult = {};
+        if (err) {
+            console.log('[UPDATE ERROR] - ', err.message);
+            requestResult.code = 1;
+            requestResult.message = err.message;
+            requestResult.data = false;
+        } else {
+            console.log('----------UPDATE-------------');
+            console.log('UPDATE affectedRows', result.affectedRows);
+            console.log('******************************');
+            requestResult.code = 0;
+            requestResult.message = 'success';
+            requestResult.data = true;
+        }
+        res.send(200, res.json(requestResult));
+    });
 }
