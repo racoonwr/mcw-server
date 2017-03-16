@@ -6,6 +6,7 @@
     "build": "babel src --out-dir lib"
   },
   "dependencies": {
+    "async": "^2.1.5",
     "dtrace-provider": "^0.8.1",
     "mysql": "^2.13.0",
     "restify": "^4.3.0"
