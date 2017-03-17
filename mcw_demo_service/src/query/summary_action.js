@@ -98,8 +98,9 @@ export function create_summary(req, res) {
 
 
 export function get_summary_detail(req, res) {
+    console.log('body = ', req.body);
     var query = 'select gsi.summary_info_id as summaryInfoId,gsi.real_start_date as realStartDate,' +
-        'gsi.real_end_date as realEndDate,gsi.meeting_compere as meetingCompere,gis.meeting_recorder as meetingRecorder,' +
+        'gsi.real_end_date as realEndDate,gsi.meeting_compere as meetingCompere,gsi.meeting_recorder as meetingRecorder,' +
         'gsi.invited_users as invitedUsers,gsi.meeting_pics as meetingPics,gsi.created_by as createdBy,gsi.creation_date as' +
         ' creationDate from g_summary_info gsi where gsi.summary_info_id = ?';
     var inputParam = [req.params.summaryInfoId];
@@ -116,7 +117,7 @@ export function get_summary_detail(req, res) {
                 requestResult.message = 'success';
                 requestResult.data = rows;
             }
-            connection.release();
+            // connection.release();
             res.send(200, res.json(requestResult));
         })
     });

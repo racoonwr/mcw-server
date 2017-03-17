@@ -31,13 +31,14 @@ export function create_meeting(req, res) {
                 requestResult.message = 'success';
                 requestResult.data = true;
             }
-            connection.release();
+            // connection.release();
             res.send(200, res.json(requestResult));
         });
     });
 };
 
 export function get_meeting_list(req, res) {
+    console.log('body = ', req.body);
     var query = 'select gm.meeting_id as meetingId,gm.created_by as createdBy,gm.title as title,gm.START_DATE_PLAN ' +
         'as startDatePlan,gm.END_DATE_PLAN as endDatePlan,gm.LOCATION as location,gm.STATUS_CODE as statusCode from g_meeting gm where gm.CREATED_BY ' +
         'in (select ggu2.user_id from g_group_user ggu2 ' +
@@ -56,7 +57,7 @@ export function get_meeting_list(req, res) {
                 requestResult.message = 'success';
                 requestResult.data = rows;
             }
-            connection.release();
+            // connection.release();
             res.send(200, res.json(requestResult));
         })
     });
@@ -64,6 +65,7 @@ export function get_meeting_list(req, res) {
 
 
 export function get_meeting_detail(req, res) {
+    console.log('body = ', req.body);
     var query = 'select gm.meeting_id as meetingId,gm.title as title,gm.start_date_plan as startDatePlan,' +
         'gm.end_date_plan as endDatePlan,gm.summary_info_id as summaryInfoId,gm.meeting_require as meetingRequire,' +
         'gm.location as location,gm.status_code as statusCode,gm.created_by as createdBy,gm.creation_date as' +
@@ -82,13 +84,14 @@ export function get_meeting_detail(req, res) {
                 requestResult.message = 'success';
                 requestResult.data = rows;
             }
-            connection.release();
+            // connection.release();
             res.send(200, res.json(requestResult));
         })
     });
 }
 
 export function start_meeting(req, res) {
+    console.log('body = ', req.body);
     var updateSql = 'UPDATE g_meeting SET status_code = ?,begin_sign_time = ? WHERE meeting_id = ?';
     var updateSql_Params = ['INMEETING', new Date().getTime(), req.params.meetingId];
     db.getConnection(function(connection){
@@ -107,13 +110,14 @@ export function start_meeting(req, res) {
                 requestResult.message = 'success';
                 requestResult.data = true;
             }
-            connection.release();
+            // connection.release();
             res.send(200, res.json(requestResult));
         });
     });
 }
 
 export function end_meeting(req, res) {
+    console.log('body = ', req.body);
     var updateSql = 'UPDATE g_meeting SET status_code = ?,END_MEETING_TIME = ? WHERE meeting_id = ?';
     var updateSql_Params = ['SUMMARY', new Date().getTime(), req.params.meetingId];
     db.getConnection(function(connection){
@@ -132,7 +136,7 @@ export function end_meeting(req, res) {
                 requestResult.message = 'success';
                 requestResult.data = true;
             }
-            connection.release();
+            // connection.release();
             res.send(200, res.json(requestResult));
         });
     });

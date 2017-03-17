@@ -3,7 +3,7 @@
  */
 var db = require('../config/maria_db_config')
 
-export function select_from_g_user(req, res, next) {
+export function select_from_g_user(req, res) {
     db.getConnection(function(connection){
         connection.query({
                 sql: 'select gu.user_id as userId,gu.name as name,gu.gender as gender,gu.phone as phone,' +
@@ -24,5 +24,4 @@ export function select_from_g_user(req, res, next) {
                 res.send(200, res.json(requestResult));
             });
     });
-    return next;
 };
