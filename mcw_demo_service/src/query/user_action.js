@@ -21,6 +21,7 @@ export function select_from_g_user(req, res) {
                     requestResult.message = 'success';
                     requestResult.data = rows;
                 }
+                connection.release();
                 res.send(200, res.json(requestResult));
             });
     });

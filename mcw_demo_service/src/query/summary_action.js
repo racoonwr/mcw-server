@@ -117,7 +117,7 @@ export function get_summary_detail(req, res) {
                 requestResult.message = 'success';
                 requestResult.data = rows;
             }
-            // connection.release();
+            connection.release();
             res.send(200, res.json(requestResult));
         })
     });
