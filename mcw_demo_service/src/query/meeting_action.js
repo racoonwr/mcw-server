@@ -142,3 +142,33 @@ export function end_meeting(req, res) {
         });
     });
 }
+
+export function meeting_sign(req, res) {
+    console.log('body = ', req.body);
+    var now = new Date();
+    var createSql = 'insert into g_user_sign(sign_id,meeting_id,PARTICIPANT_ID,sign_date,' +
+        'created_by,creation_date,last_updated_by,last_update_date,record_status,version_number) values (?,?,?,?,?,?,?,?,?)';
+
+    var inputParams = [req.params.signId, req.params.meetingId, req.params.userId, now.getTime(),
+        req.params.createdBy, now.getTime(), req.params.createdBy, now.getTime(), 'VALID', 1];
+
+    db.getConnection(function (connection) {
+        connection.query(createSql, inputParams, function (err, result) {
+            var requestResult = {};
+            if (err) {
+                console.log('[INSERT ERROR] - ', err.message);
+                requestResult.code = 1;
+                requestResult.message = err.message;
+                requestResult.data = false;
+            } else {
+                console.log('INSERT ID : ', result);
+                requestResult.code = 0;
+                requestResult.message = 'success';
+                requestResult.data = true;
+            }
+            connection.release();
+            res.send(200, res.json(requestResult));
+        });
+    });
+}
+
