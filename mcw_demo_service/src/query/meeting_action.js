@@ -147,7 +147,7 @@ export function meeting_sign(req, res) {
     console.log('body = ', req.body);
     var now = new Date();
     var createSql = 'insert into g_user_sign(sign_id,meeting_id,PARTICIPANT_ID,sign_date,' +
-        'created_by,creation_date,last_updated_by,last_update_date,record_status,version_number) values (?,?,?,?,?,?,?,?,?)';
+        'created_by,creation_date,last_updated_by,last_update_date,record_status,version_number) values (?,?,?,?,?,?,?,?,?,?)';
 
     var inputParams = [req.params.signId, req.params.meetingId, req.params.userId, now.getTime(),
         req.params.createdBy, now.getTime(), req.params.createdBy, now.getTime(), 'VALID', 1];
