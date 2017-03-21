@@ -3,29 +3,15 @@
  */
 var db = require('../config/maria_db_config')
 var async = require('async');
+import {select_data, update_data, insert_data} from '../util/db_util'
 
 export function get_vote_list(req, res) {
     console.log('body = ', req.body);
     var querySql = 'select gv.VOTE_ID as voteId,gv.VOTE_CONTENT as voteContent,gv.ANONYMITY as anonymity,gv.STATUS_CODE as statusCode from g_vote gv where gv.MEETING_ID = ?';
     var inputParams = [req.params.meetingId];
 
-    db.getConnection(function (connection) {
-        connection.query(querySql, inputParams,
-            function (err, rows) {
-                var requestResult = {};
-                if (err) {
-                    console.log('[SELECT ERROR] - ', err.message);
-                    requestResult.code = 1;
-                    requestResult.message = err.message;
-                    requestResult.data = {};
-                } else {
-                    requestResult.code = 0;
-                    requestResult.message = 'success';
-                    requestResult.data = rows;
-                }
-                connection.release();
-                res.send(200, res.json(requestResult));
-            });
+    select_data(querySql, inputParams, function (err, result) {
+        res.send(200, res.json(result));
     })
 };
 
@@ -37,23 +23,8 @@ export function get_vote_detail(req, res) {
         '(select gvr.result_code from g_vote_record gvr where gvr.vote_id = ? and gvr.created_by = ? ) as resultCode' +
         ' from g_vote gv where gv.vote_id = ?';
     var inputParams = [req.params.voteId, req.params.userId, req.params.voteId];
-    db.getConnection(function (connection) {
-        connection.query(querySql, inputParams,
-            function (err, rows) {
-                var requestResult = {};
-                if (err) {
-                    console.log('[SELECT ERROR] - ', err.message);
-                    requestResult.code = 1;
-                    requestResult.message = err.message;
-                    requestResult.data = {};
-                } else {
-                    requestResult.code = 0;
-                    requestResult.message = 'success';
-                    requestResult.data = rows;
-                }
-                connection.release();
-                res.send(200, res.json(requestResult));
-            });
+    select_data(querySql, inputParams, function (err, result) {
+        res.send(200, res.json(result));
     })
 };
 
@@ -69,26 +40,9 @@ export function create_vote(req, res) {
         req.params.anonymity, 'INVOTING', req.params.userId, now.getTime(),
         req.params.userId, now.getTime(), 'VALID', 1];
 
-    console.log('createVoteSql ', createVoteSql);
-    console.log('inputParams ', inputParams);
-    var requestResult = {};
-    db.getConnection(function (connection) {
-        connection.query(createVoteSql, inputParams, function (err, result) {
-            if (err) {
-                console.log('[INSERT ERROR] - ', err.message);
-                requestResult.code = 1;
-                requestResult.message = err.message;
-                requestResult.data = false;
-            } else {
-                console.log('INSERT ID : ', result);
-                requestResult.code = 0;
-                requestResult.message = 'success';
-                requestResult.data = true;
-            }
-            connection.release();
-            res.send(200, res.json(requestResult));
-        });
-    })
+    insert_data(createVoteSql,inputParams,function (err, result) {
+        res.send(200, res.json(result));
+    });
 };
 
 export function create_votes(req, res) {
@@ -128,14 +82,12 @@ export function create_votes(req, res) {
                                 requestResult.message = err.message;
                                 requestResult.data = false;
                                 callback(err, null);
-                                res.send(200, res.json(requestResult));
                                 return;
                             }
                             console.log('INSERT ID : ', result);
                             callback(null, result);
                         });
                     }
-
                     tasks[index] = task;
                 })(votes[i], i);
             }
@@ -148,7 +100,8 @@ export function create_votes(req, res) {
                         //释放资源
                         connection.release();
                     });
-                    result;
+                    res.send(200, res.json(requestResult));
+                    return;
                 }
                 connection.commit(function (err) {
                     if (err) {
@@ -172,7 +125,6 @@ export function create_votes(req, res) {
 
     })
 }
-
 
 export function create_vote_record(req, res) {
     // AGREE/REJECT/GIVEUP/KEEP
@@ -223,13 +175,10 @@ export function create_vote_record(req, res) {
                         requestResult.message = err.message;
                         requestResult.data = false;
                         callback(err, null);
-                        res.send(200, res.json(requestResult));
                         return;
                     }
                     console.log('INSERT ID : ', result);
                     callback(null, result);
-
-
                 });
             }
 
@@ -260,7 +209,8 @@ export function create_vote_record(req, res) {
                         //释放资源
                         connection.release();
                     });
-                    result;
+                    res.send(200, res.json(requestResult));
+                    return;
                 }
                 connection.commit(function (err) {
                     if (err) {

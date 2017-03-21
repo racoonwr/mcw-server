@@ -1,5 +1,5 @@
 import {select_from_g_user} from './query/user_action'
-import {create_meeting,get_meeting_list,get_meeting_detail,start_meeting,end_meeting,meeting_sign} from './query/meeting_action'
+import {create_meeting_v2,get_meeting_list,get_meeting_detail,start_meeting,end_meeting,meeting_sign} from './query/meeting_action'
 import {get_vote_list,create_vote,create_votes,get_vote_detail,create_vote_record} from './query/vote_action'
 import {create_summary,get_summary_detail} from './query/summary_action'
 
@@ -10,7 +10,7 @@ serverIns.get('user/all', select_from_g_user);
 
 serverIns.get('meeting/list/:userId/:pageNo/:pageSize', get_meeting_list);
 serverIns.get('meeting/detail/:meetingId', get_meeting_detail);
-serverIns.post('meeting/create', create_meeting);
+serverIns.post('meeting/create', create_meeting_v2);
 serverIns.post('meeting/start',start_meeting);
 serverIns.post('meeting/end',end_meeting);
 serverIns.post('meeting/sign',meeting_sign);

@@ -2,8 +2,8 @@
   "name": "application-name",
   "version": "0.0.1",
   "scripts": {
-    "start": "babel-node lib/index.js",
-    "build": "babel src --out-dir lib"
+    "start": "babel-node build/index.js",
+    "build": "babel src --out-dir build"
   },
   "dependencies": {
     "async": "^2.1.5",
