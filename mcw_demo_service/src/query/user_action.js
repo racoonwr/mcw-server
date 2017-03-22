@@ -1,7 +1,6 @@
 /**
  * Created by racoon on 2017/3/12.
  */
-var db = require('../config/maria_db_config')
 import {select_data} from '../util/db_util'
 
 export function select_from_g_user(req, res) {

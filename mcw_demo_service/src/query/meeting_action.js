@@ -59,7 +59,6 @@ export function create_meeting_v2(req, res) {
 
             for (var i = 0; i < participants.length; i++) {
                 (function (participant, index) {
-
                     var createSql = 'INSERT INTO g_user_sign (sign_id,meeting_id' +
                         ',PARTICIPANT_ID' +
                         ',sign_date' +
@@ -136,7 +135,7 @@ export function get_meeting_list(req, res) {
         'as startDatePlan,gm.END_DATE_PLAN as endDatePlan,gm.LOCATION as location,gm.STATUS_CODE as statusCode from ' +
         'g_meeting gm where gm.CREATED_BY in (select ggu2.user_id from g_group_user ggu2 ' +
         'where ggu2.group_id = (select ggu.GROUP_ID from g_group_user ggu where ggu.USER_ID = ?)) order by gm.START_DATE_PLAN desc limit '
-        + req.params.pageNo + ',' + req.params.pageSize;
+        + (req.params.pageNo * req.params.pageSize) + ',' + req.params.pageSize;
 
     var inputParam = [req.params.userId];
 
