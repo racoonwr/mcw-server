@@ -21,6 +21,7 @@ export function create_meeting(req, res) {
 
 export function create_meeting_v2(req, res) {
     console.log('body = ', req.body);
+    req.setHeaders('Access-Control-Allow-Origin','*');
     //开启事务
     db.getConnection(function (connection) {
         connection.beginTransaction(function (err) {
