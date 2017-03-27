@@ -7,6 +7,7 @@ import {select_data} from '../util/db_util'
 
 export function create_summary(req, res) {
     console.log('body = ', req.body);
+    res.setHeader('Access-Control-Allow-Origin','*');
     //开启事务
     db.getConnection(function (connection) {
         connection.beginTransaction(function (err) {
@@ -95,6 +96,7 @@ export function create_summary(req, res) {
 
 export function get_summary_detail(req, res) {
     console.log('body = ', req.body);
+    res.setHeader('Access-Control-Allow-Origin','*');
     var query = 'select gsi.summary_info_id as summaryInfoId,gsi.real_start_date as realStartDate,' +
         'gsi.real_end_date as realEndDate,gsi.meeting_compere as meetingCompere,gsi.meeting_recorder as meetingRecorder,' +
         'gsi.invited_users as invitedUsers,gsi.meeting_pics as meetingPics,gsi.created_by as createdBy,gsi.creation_date as' +

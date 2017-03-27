@@ -7,6 +7,7 @@ import {select_data, update_data, insert_data} from '../util/db_util'
 
 export function get_vote_list(req, res) {
     console.log('body = ', req.body);
+    res.setHeader('Access-Control-Allow-Origin','*');
     var querySql = 'select gv.VOTE_ID as voteId,gv.VOTE_CONTENT as voteContent,gv.ANONYMITY as anonymity,gv.STATUS_CODE as statusCode from g_vote gv where gv.MEETING_ID = ?';
     var inputParams = [req.params.meetingId];
 
@@ -17,6 +18,7 @@ export function get_vote_list(req, res) {
 
 export function get_vote_detail(req, res) {
     console.log('body = ', req.body);
+    res.setHeader('Access-Control-Allow-Origin','*');
     var querySql = 'select gv.VOTE_ID as voteId,gv.VOTE_CONTENT as voteContent,gv.ANONYMITY as anonymity,' +
         'gv.STATUS_CODE as statusCode ,gv.count_agree as countAgree,gv.count_reject as countReject,' +
         'gv.count_giveup as countGiveup,gv.count_keep as countKeep,' +
@@ -30,6 +32,7 @@ export function get_vote_detail(req, res) {
 
 export function create_vote(req, res) {
     console.log('body = ', req.body);
+    res.setHeader('Access-Control-Allow-Origin','*');
     var now = new Date();
 
     var createVoteSql = 'insert into g_vote(vote_id,meeting_id,vote_content,anonymity' +
@@ -47,6 +50,7 @@ export function create_vote(req, res) {
 
 export function create_votes(req, res) {
     console.log('body = ', req.body);
+    res.setHeader('Access-Control-Allow-Origin','*');
     var votes = req.params.list;
     var meetingId = req.params.meetingId;
     var now = new Date();
@@ -129,6 +133,7 @@ export function create_votes(req, res) {
 export function create_vote_record(req, res) {
     // AGREE/REJECT/GIVEUP/KEEP
     console.log('body = ', req.body);
+    res.setHeader('Access-Control-Allow-Origin','*');
     var resultCode = req.params.resultCode;
     var updateField = 'COUNT_' + resultCode;
     // switch (resultCode){
