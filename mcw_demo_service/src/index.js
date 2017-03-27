@@ -9,9 +9,9 @@ import {
 } from './query/meeting_action'
 import {get_vote_list, create_vote, create_votes, get_vote_detail, create_vote_record} from './query/vote_action'
 import {create_summary, get_summary_detail} from './query/summary_action'
-var socketio = require('socket.io');
+// var socketio = require('socket.io');
 var serverIns = require('./restify_server_ins')
-var io = socketio.listen(serverIns.server);
+// var io = socketio.listen(serverIns.server);
 
 
 serverIns.get('user/all', select_from_g_user);
@@ -32,12 +32,12 @@ serverIns.post('vote/record/create', create_vote_record);
 serverIns.get('summary/detail/:summaryInfoId', get_summary_detail);
 serverIns.post('summary/create', create_summary);
 
-io.sockets.on('connection', function (socket) {
-    socket.emit('news', {hello: 'world'});
-    socket.on('my other event', function (data) {
-        console.log(data);
-    });
-});
+// io.sockets.on('connection', function (socket) {
+//     socket.emit('news', {hello: 'world'});
+//     socket.on('my other event', function (data) {
+//         console.log(data);
+//     });
+// });
 
 serverIns.listen(8081, function () {
     console.log('%s listening at %s', serverIns.name, serverIns.url);
